@@ -23,7 +23,7 @@ haribote.img : haribote/ipl09.bin haribote/haribote.sys Makefile \
 		sosu/sosu.hrb sosu2/sosu2.hrb sosu3/sosu3.hrb \
 		type/type.hrb iroha/iroha.hrb chklang/chklang.hrb \
 		notrec/notrec.hrb bball/bball.hrb invader/invader.hrb \
-		calc/calc.hrb tview/tview.hrb mmlplay/mmlplay.hrb gview/gview.hrb 
+		calc/calc.hrb tview/tview.hrb mmlplay/mmlplay.hrb gview/gview.hrb
 	$(EDIMG)   imgin:../z_tools/fdimg0at.tek \
 		wbinimg src:haribote/ipl09.bin len:512 from:0 to:0 \
 		copy from:haribote/haribote.sys to:@: \

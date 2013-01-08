@@ -51,7 +51,7 @@ void HariMain(void)
 	unsigned char *nihongo;
 	struct FILEINFO *finfo;
 	extern char hankaku[4096];
-	struct TIMER *clock_timer;	//时钟计时器
+	struct TIMER *clock_timer;	//时钟计时苼E
 	int hour, min, sec, itv = 100;
 
 	init_gdtidt();
@@ -294,12 +294,21 @@ void HariMain(void)
 					}
 					new_mx = mx;
 					new_my = my;
+					if (sht_startmenu->height != -1) { // moved onto the start menu
+						x = mx - sht_startmenu->vx0;
+						y = my - sht_startmenu->vy0;
+						if (x < 250 && x > 35 && y < 400 && y > 0) {
+								sprintf(s, "%02d,%02d", mx, my);
+								putfonts8_asc_sht(sht_back, 0, 0, COL8_000000, COL8_C6C6C6, s, 10);
+								y /= 50;
+						}
+					}
 					if ((mdec.btn & 0x01) != 0) {
 						/* 嵍儃僞儞傪墴偟偰偄傞 */
 						if (mmx < 0) {
 							/* 捠忢儌乕僪偺応崌 */
 							/* 忋偺壓偠偒偐傜弴斣偵儅僂僗偑巜偟偰偄傞壓偠偒傪扵偡 */
-							if (sht_startmenu->height != -1)
+							if (sht_startmenu->height != -1) 
 								sheet_updown(sht_startmenu, -1); // make start menu invisible.
 							for (j = shtctl->top - 1; j > 0; j--) {
 								sht = shtctl->sheets[j];
@@ -307,7 +316,7 @@ void HariMain(void)
 								y = my - sht->vy0;
 								if (0 <= x && x < sht->bxsize && 0 <= y && y < sht->bysize) {
 									if (sht->buf[y * sht->bxsize + x] != sht->col_inv) {
-										if (sht->start == START_MENU || sht->start == START_BUTTON) {
+										if (sht->start != 0) {
 											sheet_updown(sht_startmenu, 2);
 											break;
 										}
