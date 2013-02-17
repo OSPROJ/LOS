@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #define KEYCMD_LED		0xed
+#define CLOCK_KNOCK 	99999
 
 void keywin_off(struct SHEET *key_win);
 void keywin_on(struct SHEET *key_win);
@@ -51,6 +52,8 @@ void HariMain(void)
 	unsigned char *nihongo;
 	struct FILEINFO *finfo;
 	extern char hankaku[4096];
+	struct TIMER *clock_timer;	//时钟计时器
+	int hour, min;
 
 	init_gdtidt();
 	init_pic();
@@ -125,6 +128,16 @@ void HariMain(void)
 	*((int *) 0x0fe8) = (int) nihongo;
 	memman_free_4k(memman, (int) fat, 4 * 2880);
 
+	/*时钟设置*/
+	clock_timer = timer_alloc();
+	timer_init(clock_timer, &fifo, CLOCK_KNOCK);
+	timer_settime(clock_timer, 6000); //每60分钟到点一次
+	hour = ((binfo->btime >> 12) & 0x0f) * 10 + ((binfo->btime >> 8) & 0x0f);
+	min = ((binfo->btime >> 4) & 0x0f) * 10 + (binfo->btime & 0x0f);
+	sprintf(s, "%02d:%02d", hour, min);
+	putfonts8_asc_sht(sht_back, binfo->scrnx-56, binfo->scrny-21, COL8_000000, COL8_C6C6C6, s, 5);
+
+	
 	for (;;) {
 		if (fifo32_status(&keycmd) > 0 && keycmd_wait < 0) {
 			/* 僉乕儃乕僪僐儞僩儘乕儔偵憲傞僨乕僞偑偁傟偽丄憲傞 */
@@ -336,6 +349,16 @@ void HariMain(void)
 				sht2 = shtctl->sheets0 + (i - 2024);
 				memman_free_4k(memman, (int) sht2->buf, 256 * 165);
 				sheet_free(sht2);
+			} else if (i == CLOCK_KNOCK) {
+				timer_init(clock_timer, &fifo, CLOCK_KNOCK);
+				timer_settime(clock_timer, 6000);
+				if (++min >59) {
+					min = 0;
+					if (++hour > 23)
+						hour = 0;
+				}
+				sprintf(s, "%02d:%02d", hour, min);
+				putfonts8_asc_sht(sht_back, binfo->scrnx-56, binfo->scrny-21, COL8_000000, COL8_C6C6C6, s, 5);
 			}
 		}
 	}

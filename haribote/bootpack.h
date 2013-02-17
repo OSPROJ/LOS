@@ -6,6 +6,7 @@ struct BOOTINFO { /* 0x0ff0-0x0fff */
 	char reserve;
 	short scrnx, scrny; /* ‰æ–Ê‰ð‘œ“x */
 	char *vram;
+	short btime;
 };
 #define ADR_BOOTINFO	0x00000ff0
 #define ADR_DISKIMG		0x00100000

@@ -22,6 +22,7 @@ VMODE	EQU		0x0ff2			; 色数に関する情報。何ビットカラーか？
 SCRNX	EQU		0x0ff4			; 解像度のX
 SCRNY	EQU		0x0ff6			; 解像度のY
 VRAM	EQU		0x0ff8			; グラフィックバッファの開始番地
+BTIME	EQU		0x0ffc			; bios当中的??
 
 		ORG		0xc200			; このプログラムがどこに読み込まれるのか
 
@@ -71,7 +72,7 @@ VRAM	EQU		0x0ff8			; グラフィックバッファの開始番地
 		MOV		[SCRNY],AX
 		MOV		EAX,[ES:DI+0x28]
 		MOV		[VRAM],EAX
-		JMP		keystatus
+		JMP		bios_time
 
 scrn320:
 		MOV		AL,0x13			; VGAグラフィックス、320x200x8bitカラー
@@ -84,6 +85,11 @@ scrn320:
 
 ; キーボードのLED状態をBIOSに教えてもらう
 
+bios_time:
+		MOV		AH,0x02
+		INT		0x1a
+		MOV		[BTIME],CX
+		
 keystatus:
 		MOV		AH,0x02
 		INT		0x16 			; keyboard BIOS
