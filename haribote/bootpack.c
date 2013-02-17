@@ -129,6 +129,7 @@ void HariMain(void)
 	memman_free_4k(memman, (int) fat, 4 * 2880);
 
 	/*时钟设置*/
+	/*时钟是以分钟为单位的*/
 	clock_timer = timer_alloc();
 	timer_init(clock_timer, &fifo, CLOCK_KNOCK);
 	timer_settime(clock_timer, 6000); //每60分钟到点一次
