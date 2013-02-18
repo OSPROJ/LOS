@@ -89,6 +89,7 @@ bios_time:
 		MOV		AH,0x02
 		INT		0x1a
 		MOV		[BTIME],CX
+		MOV		[BTIME+2],DX
 		
 keystatus:
 		MOV		AH,0x02

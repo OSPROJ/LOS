@@ -53,7 +53,7 @@ void HariMain(void)
 	struct FILEINFO *finfo;
 	extern char hankaku[4096];
 	struct TIMER *clock_timer;	//时钟计时器
-	int hour, min;
+	int hour, min, sec, itv = 100;
 
 	init_gdtidt();
 	init_pic();
@@ -132,9 +132,10 @@ void HariMain(void)
 	/*时钟是以分钟为单位的*/
 	clock_timer = timer_alloc();
 	timer_init(clock_timer, &fifo, CLOCK_KNOCK);
-	timer_settime(clock_timer, 6000); //每60分钟到点一次
+	timer_settime(clock_timer, itv); //每60分钟到点一次
 	hour = ((binfo->btime >> 12) & 0x0f) * 10 + ((binfo->btime >> 8) & 0x0f);
 	min = ((binfo->btime >> 4) & 0x0f) * 10 + (binfo->btime & 0x0f);
+	sec = ((binfo->btime >> 28) & 0x0f) * 10 + ((binfo->btime >> 24) & 0x0f);
 	sprintf(s, "%02d:%02d", hour, min);
 	putfonts8_asc_sht(sht_back, binfo->scrnx-56, binfo->scrny-21, COL8_000000, COL8_C6C6C6, s, 5);
 
@@ -352,11 +353,22 @@ void HariMain(void)
 				sheet_free(sht2);
 			} else if (i == CLOCK_KNOCK) {
 				timer_init(clock_timer, &fifo, CLOCK_KNOCK);
-				timer_settime(clock_timer, 6000);
-				if (++min >59) {
-					min = 0;
-					if (++hour > 23)
-						hour = 0;
+				timer_settime(clock_timer, itv);
+				if (itv == 100) {
+					if (++sec > 59) {
+						itv = 6000;
+						if (++min > 59) {
+							min = 0;
+							if (++hour > 23)
+								hour = 0;
+						}
+					}
+				} else {
+					if (++min > 59) {
+						min = 0;
+						if (++hour > 23)
+							hour = 0;
+					}
 				}
 				sprintf(s, "%02d:%02d", hour, min);
 				putfonts8_asc_sht(sht_back, binfo->scrnx-56, binfo->scrny-21, COL8_000000, COL8_C6C6C6, s, 5);
