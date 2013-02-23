@@ -1,5 +1,3 @@
-/* bootpack偺儊僀儞 */
-
 #include "bootpack.h"
 #include <stdio.h>
 
@@ -53,7 +51,7 @@ void HariMain(void)
 	unsigned char *nihongo;
 	struct FILEINFO *finfo;
 	extern char hankaku[4096];
-	struct TIMER *clock_timer;	//时钟计时苼E
+	struct TIMER *clock_timer;	//时钟计时器
 	int hour, min, sec, itv = 100;
 
 	init_gdtidt();
@@ -408,7 +406,7 @@ void HariMain(void)
 
 void keywin_off(struct SHEET *key_win)
 {
-	if (key_win->start != 0) return;
+	if (key_win->start != 0) return; //避免start menu/ button
 	change_wtitle8(key_win, 0);
 	if ((key_win->flags & 0x20) != 0) {
 		fifo32_put(&key_win->task->fifo, 3); /* 僐儞僜乕儖偺僇乕僜儖OFF */
