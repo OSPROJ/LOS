@@ -63,6 +63,50 @@ void boxfill8(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, i
 	return;
 }
 
+
+void print_startlogo(char *buf, char bc, int xsize, int ysize)
+{
+	static char cursor[13][49] = {
+		"******.oooooo..eeeeee.eeeeee...ee...eeeeee.eeeeee",
+		"******.oooooo..ee.......ee....e..e..ee..ee...ee..",
+		"******.oooooo..ee.......ee....e..e..ee..ee...ee..",
+		"******.oooooo..ee.......ee...ee..ee.ee..ee...ee..",
+		"******.oooooo..ee.......ee...ee..ee.ee..ee...ee..",
+		"******.oooooo..ee.......ee...ee..ee.ee..e....ee..",
+		"...............eeeeee...ee...eeeeee.ee.ee....ee..",
+		"@@@@@@.uuuuuu......ee...ee...ee..ee.ee..e....ee..",
+		"@@@@@@.uuuuuu......ee...ee...ee..ee.ee..ee...ee..",
+		"@@@@@@.uuuuuu......ee...ee...ee..ee.ee..ee...ee..",
+		"@@@@@@.uuuuuu......ee...ee...ee..ee.ee..ee...ee..",
+		"@@@@@@.uuuuuu......ee...ee...ee..ee.ee..ee...ee..",
+		"@@@@@@.uuuuuu..eeeeee...ee...ee..ee.ee..ee...ee.."
+	};
+	int x, y;
+	char c;
+
+	for (y = 0; y < 13; y++) {
+		for (x = 0; x < 49; x++) {
+			switch (cursor[y][x]) {
+				case '*':
+					c = COL8_FF0000; break;
+				case '.':
+					c = bc; break;
+				case 'o':
+					c = COL8_008400; break;
+				case '@':
+					c = COL8_00FFFF; break;
+				case 'u':
+					c = COL8_FFFF00; break;
+				case 'e':
+					c = COL8_000000; break;
+			}
+			
+			buf[(y+ysize - 20) * xsize + x+6] = c;
+		}
+	}
+	return;
+}
+
 void init_screen8(char *vram, int x, int y)
 {
 	boxfill8(vram, x, COL8_008484,  0,     0,      x -  1, y - 29);
@@ -82,9 +126,11 @@ void init_screen8(char *vram, int x, int y)
 	boxfill8(vram, x, COL8_FFFFFF, x - 70, y -  3, x -  4, y -  3);
 	boxfill8(vram, x, COL8_FFFFFF, x -  3, y - 24, x -  3, y -  3);
 	
+	print_startlogo(vram, COL8_C6C6C6, x, y);
 	//make_startmenu(vram, x, y);
 	return;
 }
+
 
 void putfont8(char *vram, int xsize, int x, int y, char c, char *font)
 {

@@ -105,6 +105,7 @@ void print_logo(char *buf, char bc, int xsize, int ysize)
 
 void make_startmenu(unsigned char *buf, int x, int y)
 {
+//²Ëµ¥µÄ³ß´ç
 	int xsize = 250;
 	int ysize = 400;
 	
