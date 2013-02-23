@@ -64,7 +64,7 @@ void boxfill8(unsigned char *vram, int xsize, unsigned char c, int x0, int y0, i
 }
 
 
-void print_startlogo(char *buf, char bc, int xsize, int ysize)
+void print_startlogo(char *buf, char bc)
 {
 	static char cursor[13][49] = {
 		"******.oooooo..eeeeee.eeeeee...ee...eeeeee.eeeeee",
@@ -101,7 +101,7 @@ void print_startlogo(char *buf, char bc, int xsize, int ysize)
 					c = COL8_000000; break;
 			}
 			
-			buf[(y+ysize - 20) * xsize + x+6] = c;
+			buf[y * 49 + x] = c;
 		}
 	}
 	return;
@@ -126,7 +126,7 @@ void init_screen8(char *vram, int x, int y)
 	boxfill8(vram, x, COL8_FFFFFF, x - 70, y -  3, x -  4, y -  3);
 	boxfill8(vram, x, COL8_FFFFFF, x -  3, y - 24, x -  3, y -  3);
 	
-	print_startlogo(vram, COL8_C6C6C6, x, y);
+	//print_startlogo(vram, COL8_C6C6C6, x, y);
 	//make_startmenu(vram, x, y);
 	return;
 }

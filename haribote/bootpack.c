@@ -22,8 +22,9 @@ void HariMain(void)
 	unsigned int memtotal;
 	struct MOUSE_DEC mdec;
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
-	unsigned char *buf_back, buf_mouse[256];
-	struct SHEET *sht_back, *sht_mouse;
+	unsigned char *buf_back, buf_mouse[256], buf_button[13*49];
+	unsigned char *buf_menu;
+	struct SHEET *sht_back, *sht_mouse, *sht_startbutton, *sht_startmenu;
 	struct TASK *task_a, *task;
 	static char keytable0[0x80] = {
 		0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', 0x08, 0,
@@ -52,7 +53,7 @@ void HariMain(void)
 	unsigned char *nihongo;
 	struct FILEINFO *finfo;
 	extern char hankaku[4096];
-	struct TIMER *clock_timer;	//时钟计时器
+	struct TIMER *clock_timer;	//时钟计时苼E
 	int hour, min, sec, itv = 100;
 
 	init_gdtidt();
@@ -85,6 +86,19 @@ void HariMain(void)
 	buf_back  = (unsigned char *) memman_alloc_4k(memman, binfo->scrnx * binfo->scrny);
 	sheet_setbuf(sht_back, buf_back, binfo->scrnx, binfo->scrny, -1); /* 摟柧怓側偟 */
 	init_screen8(buf_back, binfo->scrnx, binfo->scrny);
+	
+	/* sht_startbutton */
+	sht_startbutton = sheet_alloc(shtctl);
+	sheet_setbuf(sht_startbutton, buf_button, 49, 13, 99);
+	print_startlogo(buf_button, 99);
+	sht_startbutton->start = START_BUTTON;
+	
+	/* sht_startmenu */
+	sht_startmenu = sheet_alloc(shtctl);
+	buf_menu = (unsigned char *) memman_alloc_4k(memman, 250*400);
+	sheet_setbuf(sht_startmenu, buf_menu, 250, 400, 99);
+	make_startmenu(buf_menu);
+	sht_startmenu->start = START_MENU;
 
 	/* sht_cons */
 	key_win = open_console(shtctl, memtotal);
@@ -99,9 +113,13 @@ void HariMain(void)
 	sheet_slide(sht_back,  0,  0);
 	sheet_slide(key_win,   32, 4);
 	sheet_slide(sht_mouse, mx, my);
+	sheet_slide(sht_startbutton, 6,binfo->scrny-20);
+	sheet_slide(sht_startmenu, 1, binfo->scrny-428);
 	sheet_updown(sht_back,  0);
 	sheet_updown(key_win,   1);
-	sheet_updown(sht_mouse, 2);
+	sheet_updown(sht_startmenu, -1);
+	sheet_updown(sht_startbutton, 2);
+	sheet_updown(sht_mouse, 4);
 	keywin_on(key_win);
 
 	/* 嵟弶偵僉乕儃乕僪忬懺偲偺怘偄堘偄偑側偄傛偆偵丄愝掕偟偰偍偔偙偲偵偡傞 */
@@ -283,12 +301,18 @@ void HariMain(void)
 						if (mmx < 0) {
 							/* 捠忢儌乕僪偺応崌 */
 							/* 忋偺壓偠偒偐傜弴斣偵儅僂僗偑巜偟偰偄傞壓偠偒傪扵偡 */
+							if (sht_startmenu->height != -1)
+								sheet_updown(sht_startmenu, -1); // make start menu invisible.
 							for (j = shtctl->top - 1; j > 0; j--) {
 								sht = shtctl->sheets[j];
 								x = mx - sht->vx0;
 								y = my - sht->vy0;
 								if (0 <= x && x < sht->bxsize && 0 <= y && y < sht->bysize) {
 									if (sht->buf[y * sht->bxsize + x] != sht->col_inv) {
+										if (sht->start == START_MENU || sht->start == START_BUTTON) {
+											sheet_updown(sht_startmenu, 2);
+											break;
+										}
 										sheet_updown(sht, shtctl->top - 1);
 										if (sht != key_win) {
 											keywin_off(key_win);
@@ -316,7 +340,12 @@ void HariMain(void)
 												sheet_updown(sht, -1); /* 偲傝偁偊偢旕昞帵偵偟偰偍偔 */
 												keywin_off(key_win);
 												key_win = shtctl->sheets[shtctl->top - 1];
-												keywin_on(key_win);
+/* 												loop_count = 2;
+												while (key_win->start == START_MENU || key_win->start == START_BUTTON) {
+													key_win = shtctl->sheets[shtctl->top - loop_count];
+													loop_count++;
+												}
+ */												keywin_on(key_win);
 												io_cli();
 												fifo32_put(&task->fifo, 4);
 												io_sti();
@@ -379,6 +408,7 @@ void HariMain(void)
 
 void keywin_off(struct SHEET *key_win)
 {
+	if (key_win->start != 0) return;
 	change_wtitle8(key_win, 0);
 	if ((key_win->flags & 0x20) != 0) {
 		fifo32_put(&key_win->task->fifo, 3); /* 僐儞僜乕儖偺僇乕僜儖OFF */
@@ -388,6 +418,7 @@ void keywin_off(struct SHEET *key_win)
 
 void keywin_on(struct SHEET *key_win)
 {
+	if (key_win->start != 0) return;
 	change_wtitle8(key_win, 1);
 	if ((key_win->flags & 0x20) != 0) {
 		fifo32_put(&key_win->task->fifo, 2); /* 僐儞僜乕儖偺僇乕僜儖ON */

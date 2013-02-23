@@ -92,10 +92,10 @@ void print_logo(char *buf, char bc, int xsize, int ysize)
 	for (y = 0; y < 26*3+4; y++) {
 		for (x = 0; x < 25; x++) {
 			if (cursor[y][x] == '*') {
-				buf[(y+ysize - 120) * xsize + x+6] = COL8_FFFFFF;
+				buf[(y+300) * xsize + x+6] = COL8_FFFFFF;
 			}
 			if (cursor[y][x] == '.') {
-				buf[(y+ysize-120) * xsize + x+6] = bc;
+				buf[(y+300) * xsize + x+6] = bc;
 			}
 		}
 	}
@@ -103,23 +103,23 @@ void print_logo(char *buf, char bc, int xsize, int ysize)
 }
 
 
-void make_startmenu(unsigned char *buf, int x, int y)
+void make_startmenu(unsigned char *buf)
 {
 //²Ëµ¥µÄ³ß´ç
 	int xsize = 250;
 	int ysize = 400;
 	
- 	boxfill8(buf, x, COL8_C6C6C6,  0,     y - ysize-1,xsize,	  y -  29); 
+ 	boxfill8(buf, xsize, COL8_C6C6C6,	0,     	0,			xsize,	  ysize); 
 
-	boxfill8(buf, x, COL8_FFFFFF,  2,     y - ysize, xsize-1,     y - ysize);
-	boxfill8(buf, x, COL8_FFFFFF,  1,     y - ysize,  1,     y -  29);
-	boxfill8(buf, x, COL8_848484,  2,     y -  30, xsize-1,     y -  30);
-	boxfill8(buf, x, COL8_848484, xsize-1,     y - ysize+1, xsize-1,     y -  30);
-	boxfill8(buf, x, COL8_000000,  1,     y -  29, xsize,     y -  29);
-	boxfill8(buf, x, COL8_000000, xsize,     y - ysize, xsize,     y -  29); 
+	boxfill8(buf, xsize, COL8_FFFFFF,	2,     		1, 			xsize-2,     	1);
+	boxfill8(buf, xsize, COL8_FFFFFF,	1,     		1,  		1,     			ysize-2);
+	boxfill8(buf, xsize, COL8_848484,	2,    		ysize-2, 	xsize-2,     	ysize-2);
+	boxfill8(buf, xsize, COL8_848484,	xsize-2,	2, 			xsize-2,     	ysize-2);
+	boxfill8(buf, xsize, COL8_000000,	1,     		ysize-1, 		xsize-1,     		ysize-1);
+	boxfill8(buf, xsize, COL8_000000,	xsize-1,  	1, 			xsize-1,     		ysize-2); 
 	
-	boxfill8(buf, x, COL8_0000FF, 3,     y - ysize+2, 33,     y -  32); 
-	print_logo(buf, COL8_0000FF,x,y);
+	boxfill8(buf, xsize, COL8_0000FF, 3,     3, 33,     ysize-3); 
+	print_logo(buf, COL8_0000FF,xsize,ysize);
 }
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title, char act)

@@ -58,6 +58,7 @@ void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s
 void init_mouse_cursor8(char *mouse, char bc);
 void putblock8_8(char *vram, int vxsize, int pxsize,
 	int pysize, int px0, int py0, char *buf, int bxsize);
+void print_startlogo(char *buf, char bc);
 #define COL8_000000		0
 #define COL8_FF0000		1
 #define COL8_00FF00		2
@@ -152,9 +153,13 @@ int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size);
 
 /* sheet.c */
 #define MAX_SHEETS		256
+
+#define START_MENU		1
+#define	START_BUTTON	2
+
 struct SHEET {
 	unsigned char *buf;
-	int bxsize, bysize, vx0, vy0, col_inv, height, flags;
+	int bxsize, bysize, vx0, vy0, col_inv, height, flags, start;
 	struct SHTCTL *ctl;
 	struct TASK *task;
 };
@@ -246,7 +251,7 @@ void putfonts8_asc_sht(struct SHEET *sht, int x, int y, int c, int b, char *s, i
 void make_textbox8(struct SHEET *sht, int x0, int y0, int sx, int sy, int c);
 void make_wtitle8(unsigned char *buf, int xsize, char *title, char act);
 void change_wtitle8(struct SHEET *sht, char act);
-void make_startmenu(unsigned char *buf, int x, int y);
+void make_startmenu(unsigned char *buf);
 
 /* console.c */
 struct CONSOLE {

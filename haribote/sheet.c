@@ -39,6 +39,7 @@ struct SHEET *sheet_alloc(struct SHTCTL *ctl)
 			sht->flags = SHEET_USE; /* 使用中マーク */
 			sht->height = -1; /* 非表示中 */
 			sht->task = 0;	/* 自動で閉じる機能を使わない */
+			sht->start = 0; //not start menu
 			return sht;
 		}
 	}
