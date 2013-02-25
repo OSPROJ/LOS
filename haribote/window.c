@@ -120,6 +120,9 @@ void make_startmenu(unsigned char *buf)
 	
 	boxfill8(buf, xsize, COL8_0000FF, 3,     3, 33,     ysize-3); 
 	print_logo(buf, COL8_0000FF,xsize,ysize);
+	
+	// apps
+	putfonts8_asc(buf, xsize, 40, 17*1, COL8_000000, "Console");
 }
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title, char act)

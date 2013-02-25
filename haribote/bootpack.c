@@ -53,6 +53,7 @@ void HariMain(void)
 	extern char hankaku[4096];
 	struct TIMER *clock_timer;	//ﾊｱﾖﾓｼﾆﾊｱﾆ・
 	int hour, min, sec, itv = 100;
+	int last_selected = 0;
 
 	init_gdtidt();
 	init_pic();
@@ -298,9 +299,16 @@ void HariMain(void)
 						x = mx - sht_startmenu->vx0;
 						y = my - sht_startmenu->vy0;
 						if (x < 250 && x > 35 && y < 400 && y > 0) {
-								sprintf(s, "%02d,%02d", mx, my);
-								putfonts8_asc_sht(sht_back, 0, 0, COL8_000000, COL8_C6C6C6, s, 10);
-								y /= 50;
+								//sprintf(s, "%02d,%02d", mx, my);
+								//putfonts8_asc_sht(sht_back, 0, 0, COL8_000000, COL8_C6C6C6, s, 10);
+								y = y / 50;
+								boxfill8(buf_menu, 250, COL8_C6C6C6, 234, last_selected*50 + 4, 246, last_selected*50 + 46);
+								sheet_refreshsub(shtctl, 234+sht_startmenu->vx0, last_selected*50 + 4+sht_startmenu->vy0, \
+									246+sht_startmenu->vx0, last_selected*50 + 46+sht_startmenu->vy0, 2, 5);
+								boxfill8(buf_menu, 250, COL8_0000FF, 235, y*50 + 5, 245, y*50 + 45);
+								sheet_refreshsub(shtctl, 235+sht_startmenu->vx0, y*50 + 5+sht_startmenu->vy0, \
+									245+sht_startmenu->vx0, y*50 + 45+sht_startmenu->vy0, 2, 5);
+								last_selected = y;
 						}
 					}
 					if ((mdec.btn & 0x01) != 0) {
@@ -308,15 +316,25 @@ void HariMain(void)
 						if (mmx < 0) {
 							/* 通常モードの場合 */
 							/* 上の下じきから順番にマウスが指している下じきを探す */
-							if (sht_startmenu->height != -1) 
+							if (sht_startmenu->height != -1) {
 								sheet_updown(sht_startmenu, -1); // make start menu invisible.
+								if (last_selected == 0) {
+									if (key_win != 0) {
+										keywin_off(key_win);
+									}
+									key_win = open_console(shtctl, memtotal);
+									sheet_slide(key_win, 32, 4);
+									sheet_updown(key_win, shtctl->top);
+									keywin_on(key_win);
+								}
+							}
 							for (j = shtctl->top - 1; j > 0; j--) {
 								sht = shtctl->sheets[j];
 								x = mx - sht->vx0;
 								y = my - sht->vy0;
 								if (0 <= x && x < sht->bxsize && 0 <= y && y < sht->bysize) {
 									if (sht->buf[y * sht->bxsize + x] != sht->col_inv) {
-										if (sht->start != 0) {
+										if (sht->start == START_BUTTON) {
 											sheet_updown(sht_startmenu, 2);
 											break;
 										}

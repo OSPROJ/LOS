@@ -1,0 +1,46 @@
+﻿update
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   apilib/Makefile
+#	modified:   apilib/alloca.nas
+#	modified:   apilib/api008.nas
+#	modified:   app_make.txt
+#	modified:   bball/bball.c
+#	modified:   beepdown/beepdown.c
+#	modified:   calc/calc.c
+#	modified:   chklang/chklang.c
+#	modified:   color/color.c
+#	modified:   color2/color2.c
+#	modified:   gview/Makefile
+#	modified:   gview/gview.c
+#	modified:   gview/jpeg.c
+#	modified:   haribote.rul
+#	modified:   invader/invader.c
+#	modified:   iroha/iroha.c
+#	new file:   m02hlxlc.agp.txt
+#	modified:   mmldata/daigo.org
+#	modified:   mmldata/daiku.org
+#	modified:   mmldata/fujisan.org
+#	modified:   mmldata/kirakira.org
+#	modified:   mmlplay/mmlplay.c
+#	modified:   noodle/noodle.c
+#	modified:   sosu/sosu.c
+#	modified:   sosu2/sosu2.c
+#	modified:   sosu3/sosu3.c
+#	modified:   star1/star1.c
+#	modified:   stars/stars.c
+#	modified:   stars2/stars2.c
+#	modified:   tek/autodec_.c
+#	modified:   tek/tek.c
+#	modified:   tview/tview.c
+#	modified:   type/type.c
+#	modified:   walk/walk.c
+#	modified:   winhelo/winhelo.c
+#	modified:   winhelo2/winhelo2.c
+#	modified:   winhelo3/winhelo3.c
+#
+

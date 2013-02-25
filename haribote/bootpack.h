@@ -59,7 +59,6 @@ void init_mouse_cursor8(char *mouse, char bc);
 void putblock8_8(char *vram, int vxsize, int pxsize,
 	int pysize, int px0, int py0, char *buf, int bxsize);
 void print_startlogo(char *buf, char bc);
-void print_startarrow(char *buf, char bc);
 
 #define COL8_000000		0
 #define COL8_FF0000		1
@@ -158,7 +157,6 @@ int memman_free_4k(struct MEMMAN *man, unsigned int addr, unsigned int size);
 
 #define START_MENU		1
 #define	START_BUTTON	2
-#define START_ARROW		3
 
 struct SHEET {
 	unsigned char *buf;
