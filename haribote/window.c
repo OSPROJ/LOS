@@ -122,7 +122,7 @@ void make_startmenu(unsigned char *buf)
 	print_logo(buf, COL8_0000FF,xsize,ysize);
 	
 	// apps
-	putfonts8_asc(buf, xsize, 40, 17*1, COL8_000000, "Console");
+	putfonts8_asc(buf, xsize, 45, 17*1, COL8_000000, "Console");
 }
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title, char act)

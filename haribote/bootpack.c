@@ -318,14 +318,18 @@ void HariMain(void)
 							/* 上の下じきから順番にマウスが指している下じきを探す */
 							if (sht_startmenu->height != -1) {
 								sheet_updown(sht_startmenu, -1); // make start menu invisible.
-								if (last_selected == 0) {
-									if (key_win != 0) {
-										keywin_off(key_win);
+								x = mx - sht_startmenu->vx0;
+								y = my - sht_startmenu->vy0;
+								if (x < 250 && x > 35 && y < 400 && y > 0) {
+									if (last_selected == 0) {
+										if (key_win != 0) {
+											keywin_off(key_win);
+										}
+										key_win = open_console(shtctl, memtotal);
+										sheet_slide(key_win, 32, 4);
+										sheet_updown(key_win, shtctl->top);
+										keywin_on(key_win);
 									}
-									key_win = open_console(shtctl, memtotal);
-									sheet_slide(key_win, 32, 4);
-									sheet_updown(key_win, shtctl->top);
-									keywin_on(key_win);
 								}
 							}
 							for (j = shtctl->top - 1; j > 0; j--) {
