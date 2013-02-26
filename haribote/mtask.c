@@ -191,7 +191,10 @@ void task_switch(void)
 	tl->now++;
     // 若当前任务未完成且其所处队列非最低优先级队列，降低其优先级。
     if (now_task->level < MAX_TASKLEVELS - 2) {
-        now_task->level++;
+        // now_task->level++;
+        if (now_task->priority > 0) {
+            now_task->priority--;
+        }
         taskctl->lv_change = 1; // 下次进行任务切换时检查LEVEL
     }
 	if (tl->now == tl->running) {
