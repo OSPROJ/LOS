@@ -14,11 +14,11 @@ struct TASK *task_now(void)
 void task_add(struct TASK *task)
 {
 	struct TASKLEVEL *tl = &taskctl->level[task->level];
-	if (tl->running < MAX_TASKS_LV) { // 任务数达到上限
-        tl->tasks[tl->running] = task;
-        tl->running++;
-        task->flags = 2
-    }
+	if (tl->running < MAX_TASKS_LV) {
+	  tl->tasks[tl->running] = task;
+	  tl->running++;
+	  task->flags = 2;
+	}
 	return;
 }
 
@@ -189,14 +189,6 @@ void task_switch(void)
 	struct TASKLEVEL *tl = &taskctl->level[taskctl->now_lv];
 	struct TASK *new_task, *now_task = tl->tasks[tl->now];
 	tl->now++;
-    // 若当前任务未完成且其所处队列非最低优先级队列，降低其优先级。
-    if (now_task->level < MAX_TASKLEVELS - 2) {
-        // now_task->level++;
-        if (now_task->priority > 0) {
-            now_task->priority--;
-        }
-        taskctl->lv_change = 1; // 下次进行任务切换时检查LEVEL
-    }
 	if (tl->now == tl->running) {
 		tl->now = 0;
 	}
