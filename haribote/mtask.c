@@ -191,7 +191,7 @@ void task_switch(void)
 	struct TASK *new_task, *now_task = tl->tasks[tl->now];
 	tl->now++;
 	// 若当前任务非哨兵，则从任务队列总删除，并改变其层和优先级重新加入队列
-	if (now_task->level < MAX_TASKLEVELS - 2 && now_task->level > 1) {
+	if (now_task->level < MAX_TASKLEVELS - 2 && now_task->level > 2) {
 	  task_remove(now_task);
 	  now_task->level++;
 	  now_task->priority = now_task->priority / 2 + 1;
