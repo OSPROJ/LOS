@@ -255,6 +255,8 @@ void change_wtitle8(struct SHEET *sht, char act);
 void make_startmenu(unsigned char *buf);
 
 /* console.c */
+#define UP_KEY      "101"
+#define DOWN_KEY    "102"
 struct CONSOLE {
 	struct SHEET *sht;
 	int cur_x, cur_y, cur_c;
