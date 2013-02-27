@@ -14,6 +14,7 @@ struct TASK *task_now(void)
 void task_add(struct TASK *task)
 {
 	struct TASKLEVEL *tl = &taskctl->level[task->level];
+	// 当前运行任务数小于上限，则加入到任务队列中
 	if (tl->running < MAX_TASKS_LV) {
 	  tl->tasks[tl->running] = task;
 	  tl->running++;
@@ -189,6 +190,13 @@ void task_switch(void)
 	struct TASKLEVEL *tl = &taskctl->level[taskctl->now_lv];
 	struct TASK *new_task, *now_task = tl->tasks[tl->now];
 	tl->now++;
+	// 若当前任务非哨兵，则从任务队列总删除，并改变其层和优先级重新加入队列
+	if (now_task->level < MAX_TASKLEVELS - 2 && now_task->level > 1) {
+	  task_remove(now_task);
+	  now_task->level++;
+	  now_task->priority = now_task->priority / 2 + 1;
+	  task_add(now_task);
+	}
 	if (tl->now == tl->running) {
 		tl->now = 0;
 	}
