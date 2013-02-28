@@ -257,6 +257,8 @@ void make_startmenu(unsigned char *buf);
 /* console.c */
 #define UP_KEY      "101"
 #define DOWN_KEY    "102"
+#define LEFT_KEY    "103"
+#define RIGHT_KEY   "104"
 struct CONSOLE {
 	struct SHEET *sht;
 	int cur_x, cur_y, cur_c;

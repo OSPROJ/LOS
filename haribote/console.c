@@ -125,7 +125,6 @@ void console_task(struct SHEET *sheet, int memtotal)
 					/* àÍî ï∂éö */
 					if (cons.cur_x < 240) {
 						/* àÍï∂éöï\é¶ÇµÇƒÇ©ÇÁÅAÉJÅ[É\ÉãÇ1Ç¬êiÇﬂÇÈ */
-						cmdline[cons.cur_x / 8 - 2] = i - 256;
                         sprintf(s, "%02X", i);
                         if (strcmp(s, UP_KEY) == 0) { // 上键扫描码对应值
                             if (cmdbuf->count == 0 || current == -1) {
@@ -147,7 +146,13 @@ void console_task(struct SHEET *sheet, int memtotal)
                                 }
                                 cons_putstr0(&cons, cmdbuf->cmd[current++].cmd);
                             }
-                        } else {
+                        } else if (strcmp(s, LEFT_KEY) == 0) {
+                            
+                        } else if (strcmp(s, RIGHT_KEY) == 0) {
+                            
+                        }
+                        else {
+                            cmdline[cons.cur_x / 8 - 2] = i - 256;
                             cons_putchar(&cons, i - 256, 1);
                         }
 					}
